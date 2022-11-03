@@ -57,10 +57,11 @@ class UpscalerRealESRGAN(Upscaler):
         return image
 
     def load_model(self, path):
+        path_name = return_path_name(path)
         try:
             info = None
             for scaler in self.scalers:
-                if scaler.data_path == path:
+                if return_path_name(scaler.data_path) == path_name:
                     info = scaler
 
             if info is None:
@@ -77,6 +78,15 @@ class UpscalerRealESRGAN(Upscaler):
 
     def load_models(self, _):
         return get_realesrgan_models(self)
+
+def return_path_name(path: str):
+    if "/" in path:
+        return path.split("/")[-1]
+    elif "\\" in path:
+        return path.split("\\")[-1]
+    else:
+        return path
+
 
 
 def get_realesrgan_models(scaler):
